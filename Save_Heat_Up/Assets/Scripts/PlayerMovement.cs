@@ -4,10 +4,10 @@ using UnityEngine;
 
 public class PlayerMovement : MonoBehaviour
 {
-    [SerializeField] private CharacterController controller = null;
-    [SerializeField] private float speed = 10f;
-    [SerializeField] private float gravity = -9.81f;
-    private Vector3 velocity;
+    [SerializeField] private CharacterController _controller = null;
+    [SerializeField] private float _speed = 10f;
+    [SerializeField] private float _gravity = -9.81f;
+    private Vector3 _velocity;
 
     // Start is called before the first frame update
     void Start()
@@ -23,10 +23,10 @@ public class PlayerMovement : MonoBehaviour
 
         Vector3 move = transform.right * x + transform.forward * z;
 
-        controller.Move(move * speed * Time.deltaTime);
+        _controller.Move(move * _speed * Time.deltaTime);
 
-        velocity.y = gravity;
+        _velocity.y = _gravity;
 
-        controller.Move(velocity * Time.deltaTime);
+        _controller.Move(_velocity * Time.deltaTime);
     }
 }
