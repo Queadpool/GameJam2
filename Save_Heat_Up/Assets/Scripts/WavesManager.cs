@@ -35,7 +35,7 @@ public class WavesManager : MonoBehaviour
     {
         ChooseSpawn();
 
-        GameObject zombie = DatabaseManager.Instance.Database.Zombie0;
+        GameObject zombie = DatabaseManager.Instance.Database.Zombie;
         if (zombie == null)
         {
             Debug.LogError("Missing target Reference");

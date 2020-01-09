@@ -12,6 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a596dda992e175b44bad2e1281540326, type: 3}
   m_Name: Database
   m_EditorClassIdentifier: 
-  _zombie0: {fileID: 2698910550350975945, guid: 8b6ca86e5af265147b29d28c8e2d2a35,
+  _zombie: {fileID: 8185430672424204560, guid: 4a8194af2e23e9b4e973768d35faef5b, type: 3}
+  _hammerZombie: {fileID: 2247622309574561700, guid: b6a7ff1e6cb22b04a923c06af72ae732,
     type: 3}
-  _zombie1: {fileID: 0}
+  _zombig: {fileID: 1474851341307215735, guid: c387cd430fa2e2a4ea54853a5cab17e4, type: 3}

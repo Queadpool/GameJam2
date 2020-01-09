@@ -5,9 +5,11 @@ using UnityEngine;
 [CreateAssetMenu(menuName = "QQ/Database")]
 public class Database : ScriptableObject
 {
-    [SerializeField] private GameObject _zombie0 = null;
-    [SerializeField] private GameObject _zombie1 = null;
+    [SerializeField] private GameObject _zombie = null;
+    [SerializeField] private GameObject _hammerZombie = null;
+    [SerializeField] private GameObject _zombig = null;
 
-    public GameObject Zombie0 { get { return _zombie0; } }
-    public GameObject Enemy1 { get { return _zombie1; } }
+    public GameObject Zombie { get { return _zombie; } }
+    public GameObject Hamemr_Zombie { get { return _hammerZombie; } }
+    public GameObject Zombig { get { return _zombig; } }
 }
