@@ -4,9 +4,13 @@ using UnityEngine;
 
 public class ZombieSpawnState : IBaseState
 {
+    private ZombieStateController _zombieController = null;
+    private Animator _animController = null;
+
     public ZombieSpawnState(ZombieStateController controller)
     {
-
+        _zombieController = controller;
+        _animController = controller.AnimController;
     }
 
     public void Enter()
@@ -21,6 +25,6 @@ public class ZombieSpawnState : IBaseState
 
     public void Exit()
     {
-
+        _animController.SetTrigger("Spawned");
     }
 }

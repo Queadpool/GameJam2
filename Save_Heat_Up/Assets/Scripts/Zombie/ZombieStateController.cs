@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.AI;
 
 public class ZombieStateController : MonoBehaviour
 {
@@ -13,8 +14,12 @@ public class ZombieStateController : MonoBehaviour
     }
 
     [SerializeField] private EZombieState _currentState = EZombieState.SPAWN;
+    [SerializeField] private Animator _animController = null;
+    [SerializeField] private NavMeshAgent _nav = null;
 
     public EZombieState CurrentState { get { return _currentState; } }
+    public Animator AnimController { get { return _animController; } }
+    public NavMeshAgent Nav { get { return _nav; } }
 
     Dictionary<EZombieState, IBaseState> _states = null;
 
