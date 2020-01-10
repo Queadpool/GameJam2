@@ -1,5 +1,9 @@
 fileFormatVersion: 2
+<<<<<<< HEAD
 guid: f24a1bcbd7dd354448ad79bd73f58849
+=======
+guid: 098b974ceade36241a146713b8e5a99c
+>>>>>>> feature/QQ
 folderAsset: yes
 DefaultImporter:
   externalObjects: {}
