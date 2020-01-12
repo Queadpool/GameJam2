@@ -65,6 +65,13 @@ public class Chunk
                                             _chunk.gameObject,
                                             this);
                     }
+                    else if (worldY == Utils.GenerateHeight(worldX, worldZ) + 1 && Utils.fBM3D(worldX, worldY, worldZ, 0.03f, 2) < 0.38f)
+                    {
+                        _chunkData[x, y, z] = new Block(Block.BlockType.STONE,
+                                            pos,
+                                            _chunk.gameObject,
+                                            this);
+                    }
                     else
                     {
                         _chunkData[x, y, z] = new Block(Block.BlockType.AIR,

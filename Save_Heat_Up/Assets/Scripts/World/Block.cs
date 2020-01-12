@@ -5,7 +5,7 @@ using UnityEngine;
 public class Block
 {
     enum Cubeside {BOTTOM, TOP, LEFT, RIGHT, FRONT, BACK};
-    public enum BlockType { GRASS, DIRT, STONE, DIAMOND, AIR };
+    public enum BlockType { GRASS, DIRT, STONE, DIAMOND, TREE, AIR };
 
     [SerializeField] private Material _cubeMaterial = null;
     [SerializeField] private BlockType _bType = BlockType.GRASS;
