@@ -87,14 +87,14 @@ public class Block
         }
 
         //all possible vertices
-        Vector3 p0 = new Vector3(-0.5f, -0.5f, 0.5f);
-        Vector3 p1 = new Vector3(0.5f, -0.5f, 0.5f);
-        Vector3 p2 = new Vector3(0.5f, -0.5f, -0.5f);
-        Vector3 p3 = new Vector3(-0.5f, -0.5f, -0.5f);
-        Vector3 p4 = new Vector3(-0.5f, 0.5f, 0.5f);
-        Vector3 p5 = new Vector3(0.5f, 0.5f, 0.5f);
-        Vector3 p6 = new Vector3(0.5f, 0.5f, -0.5f);
-        Vector3 p7 = new Vector3(-0.5f, 0.5f, -0.5f);
+        Vector3 p0 = new Vector3(0, 0, 1);
+        Vector3 p1 = new Vector3(1, 0, 1);
+        Vector3 p2 = new Vector3(1, 0, 0);
+        Vector3 p3 = new Vector3(0, 0, 0);
+        Vector3 p4 = new Vector3(0, 1, 1);
+        Vector3 p5 = new Vector3(1, 1, 1);
+        Vector3 p6 = new Vector3(1, 1, 0);
+        Vector3 p7 = new Vector3(0, 1, 0);
 
         switch(side)
         {
@@ -230,6 +230,11 @@ public class Block
         catch (System.IndexOutOfRangeException) { }
 
         return false;
+    }
+
+    public void UpdateBlockType(BlockType bType)
+    {
+        _bType = bType;
     }
 
     public void Draw()

@@ -94,6 +94,25 @@ public class Chunk
         CombineQuads();
     }
 
+    private void UpdateBlock(int x, int y, int z)
+    {
+        _chunkData[x, y, z].Draw();
+        
+        Vector3 thisBlock = new Vector3(x, y, z);
+
+    }
+
+    public void EditBlock(Vector3 pos)
+    {
+        int x = Mathf.FloorToInt(pos.x);
+        int y = Mathf.FloorToInt(pos.y);
+        int z = Mathf.FloorToInt(pos.z);
+        _chunkData[x, y, z].UpdateBlockType(Block.BlockType.AIR);
+        UpdateBlock(x, y, z);
+
+    }
+
+
     public Chunk (Vector3 position, Material c)
     {
         _chunk = new GameObject(World.BuildChunkName(position));
