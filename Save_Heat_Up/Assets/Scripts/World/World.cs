@@ -7,7 +7,7 @@ public class World : MonoBehaviour
     [SerializeField] Material _textureAtlas = null;
     public static int _columnHeight = 16;
     public static int _chunkSize = 16;
-    public static int _worldSize = 2;
+    public static int _worldSize = 8;
     public static Dictionary<string, Chunk> _chunks = null;
 
     public string[] blockTypes { get { return new string[] { "GRASS", "DIRT", "STONE", "DIAMOND"}; }}

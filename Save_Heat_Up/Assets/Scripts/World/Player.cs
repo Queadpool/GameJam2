@@ -12,7 +12,7 @@ public class Player : MonoBehaviour
     [SerializeField] private Transform _highlightBlock = null;
     [SerializeField] private Transform _placeBlock = null;
     [SerializeField] private Text _selectedBlockText = null;
-    [SerializeField] byte _selectedBlockIndex = 0;
+    [SerializeField] int _selectedBlockIndex = 0;
 
 
     [SerializeField] private float _walkSpeed = 3f;
@@ -26,8 +26,10 @@ public class Player : MonoBehaviour
     [SerializeField] private bool _isGrounded = false;
     [SerializeField] private bool _isSprinting = false;
 
-    [SerializeField] private float _checkIncrement = 0.1f;
+    [SerializeField] private float _checkIncrement = 0.025f;
     [SerializeField] private float _reach = 8f;
+
+    private Block[,,] _lastPos = null;
 
     private float _gravity = -9.8f;
 
@@ -45,6 +47,7 @@ public class Player : MonoBehaviour
     private void Start()
     {
         _cam = gameObject.GetComponentInChildren<Camera>().transform;
+        _cam.rotation = this.transform.rotation;
         Cursor.lockState = CursorLockMode.Locked;
         _selectedBlockText.text = _world.blockTypes[_selectedBlockIndex] + " block selected";
     }
@@ -103,13 +106,13 @@ public class Player : MonoBehaviour
                 _selectedBlockIndex--;
             }
 
-            if (_selectedBlockIndex > (byte)(_world.blockTypes.Length - 1)) 
+            if (_selectedBlockIndex > (_world.blockTypes.Length - 1)) 
             {
                 _selectedBlockIndex = 0;
             }
             if (_selectedBlockIndex < 0)
             {
-                _selectedBlockIndex = (byte)(_world.blockTypes.Length - 1);
+                _selectedBlockIndex = (_world.blockTypes.Length - 1);
             }
 
             _selectedBlockText.text = _world.blockTypes[_selectedBlockIndex] + " block selected";
@@ -117,7 +120,21 @@ public class Player : MonoBehaviour
         }
 
         PlaceCursorBlocks();
+
+        if (_highlightBlock.gameObject.activeSelf)
+        {
+                Chunk chunk = null;
+            //Destroy block
+            if (Input.GetMouseButtonDown(0))
+            {
+                //chunk.EditBlock(_highlightBlock.transform.position);
+            }
+
+            //PLace Block
+        }
+
     }
+
 
     private void PlaceCursorBlocks()
     {
@@ -128,14 +145,15 @@ public class Player : MonoBehaviour
         {
             Vector3 blockPos = _cam.position + (_cam.forward * step);
 
+
             if (CheckVoxel(blockPos.x, blockPos.y, blockPos.z))
             {
                 _highlightBlock.position = new Vector3(Mathf.FloorToInt(blockPos.x), Mathf.FloorToInt(blockPos.y), Mathf.FloorToInt(blockPos.z));
+
                 _placeBlock.position = lastPos;
 
                 _highlightBlock.gameObject.SetActive(true);
-                //_placeBlock.gameObject.SetActive(true);
-
+                _placeBlock.gameObject.SetActive(true);
                 return;
             }
 
@@ -188,10 +206,7 @@ public class Player : MonoBehaviour
 
     private float CheckDownSpeed (float downSpeed)
     {
-        if (CheckVoxel(transform.position.x - _playerWidth, transform.position.y + downSpeed, transform.position.z - _playerWidth) ||
-            CheckVoxel(transform.position.x + _playerWidth, transform.position.y + downSpeed, transform.position.z - _playerWidth) ||
-            CheckVoxel(transform.position.x + _playerWidth, transform.position.y + downSpeed, transform.position.z + _playerWidth) ||
-            CheckVoxel(transform.position.x - _playerWidth, transform.position.y + downSpeed, transform.position.z + _playerWidth))
+        if (CheckVoxel(transform.position.x, transform.position.y + downSpeed, transform.position.z))
         {
             _isGrounded = true;
             return 0;
@@ -205,12 +220,7 @@ public class Player : MonoBehaviour
 
     private float CheckUpSpeed(float upSpeed)
     {
-        if  (
-            CheckVoxel(transform.position.x - _playerWidth, transform.position.y + 2f + upSpeed, transform.position.z - _playerWidth) ||
-            CheckVoxel(transform.position.x + _playerWidth, transform.position.y + 2f + upSpeed, transform.position.z - _playerWidth) ||
-            CheckVoxel(transform.position.x + _playerWidth, transform.position.y + 2f + upSpeed, transform.position.z + _playerWidth) ||
-            CheckVoxel(transform.position.x - _playerWidth, transform.position.y + 2f + upSpeed, transform.position.z + _playerWidth)
-            )
+        if  (CheckVoxel(transform.position.x , transform.position.y + 2f + upSpeed, transform.position.z))
         {
             return 0;
         }
@@ -232,8 +242,8 @@ public class Player : MonoBehaviour
         get
         {
             if  (
-                CheckVoxel(transform.position.x, transform.position.y, transform.position.z + _playerWidth) ||
-                CheckVoxel(transform.position.x, transform.position.y +1f, transform.position.z + _playerWidth) 
+                CheckVoxel(transform.position.x, transform.position.y, transform.position.z) ||
+                CheckVoxel(transform.position.x, transform.position.y +1f, transform.position.z) 
                 )
             {
                 return true;
@@ -249,8 +259,8 @@ public class Player : MonoBehaviour
         get
         {
             if (
-                CheckVoxel(transform.position.x, transform.position.y, transform.position.z - _playerWidth) ||
-                CheckVoxel(transform.position.x, transform.position.y + 1f, transform.position.z - _playerWidth)
+                CheckVoxel(transform.position.x, transform.position.y, transform.position.z) ||
+                CheckVoxel(transform.position.x, transform.position.y + 1f, transform.position.z)
                 )
             {
                 return true;
@@ -266,8 +276,8 @@ public class Player : MonoBehaviour
         get
         {
             if (
-                CheckVoxel(transform.position.x + _playerWidth, transform.position.y, transform.position.z) ||
-                CheckVoxel(transform.position.x + _playerWidth, transform.position.y + 1f, transform.position.z)
+                CheckVoxel(transform.position.x, transform.position.y, transform.position.z) ||
+                CheckVoxel(transform.position.x, transform.position.y + 1f, transform.position.z)
                 )
             {
                 return true;
@@ -283,8 +293,8 @@ public class Player : MonoBehaviour
         get
         {
             if (
-                CheckVoxel(transform.position.x - _playerWidth, transform.position.y, transform.position.z) ||
-                CheckVoxel(transform.position.x - _playerWidth, transform.position.y + 1f, transform.position.z)
+                CheckVoxel(transform.position.x, transform.position.y, transform.position.z) ||
+                CheckVoxel(transform.position.x, transform.position.y + 1f, transform.position.z)
                 )
             {
                 return true;
@@ -304,12 +314,12 @@ public class Player : MonoBehaviour
         int yCheck = Mathf.FloorToInt(y);
         int zCheck = Mathf.FloorToInt(z);
 
-        int xChunk = Mathf.FloorToInt(xCheck / World._chunkSize) * 16;
-        int yChunk = Mathf.FloorToInt(yCheck / World._chunkSize) * 16;
-        int zChunk = Mathf.FloorToInt(zCheck / World._chunkSize) * 16;
+        string nName = null;
+        if (GetChunk(xCheck, yCheck, zCheck) != null)
+        {
+            nName = GetChunk(xCheck, yCheck, zCheck);
+        }
 
-        Vector3 chunkPos = new Vector3(xChunk, yChunk, zChunk);
-        string nName = World.BuildChunkName(chunkPos);
         Chunk nChunk;
 
         if (World._chunks.TryGetValue(nName, out nChunk))
@@ -325,6 +335,7 @@ public class Player : MonoBehaviour
         int yPos = (yCheck % World._chunkSize);
         int zPos = (zCheck % World._chunkSize);
 
+
         try
         {
             return chunks[xPos, yPos, zPos].IsSolid;
@@ -332,6 +343,18 @@ public class Player : MonoBehaviour
         catch (System.IndexOutOfRangeException) { }
 
         return false;
+    }
+
+    private string GetChunk(int x, int y, int z)
+    {
+        int xChunk = Mathf.FloorToInt(x / World._chunkSize) * 16;
+        int yChunk = Mathf.FloorToInt(y / World._chunkSize) * 16;
+        int zChunk = Mathf.FloorToInt(z / World._chunkSize) * 16;
+
+        Vector3 chunkPos = new Vector3(xChunk, yChunk, zChunk);
+
+
+        return World.BuildChunkName(chunkPos);
     }
 
 }

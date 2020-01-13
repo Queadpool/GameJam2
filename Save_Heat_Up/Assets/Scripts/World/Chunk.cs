@@ -65,6 +65,13 @@ public class Chunk
                                             _chunk.gameObject,
                                             this);
                     }
+                    else if (worldY == Utils.GenerateHeight(worldX, worldZ) + 1 && Utils.fBM3D(worldX, worldY, worldZ, 0.03f, 2) < 0.38f)
+                    {
+                        _chunkData[x, y, z] = new Block(Block.BlockType.STONE,
+                                            pos,
+                                            _chunk.gameObject,
+                                            this);
+                    }
                     else
                     {
                         _chunkData[x, y, z] = new Block(Block.BlockType.AIR,
@@ -93,6 +100,25 @@ public class Chunk
 
         CombineQuads();
     }
+
+    private void UpdateBlock(int x, int y, int z)
+    {
+        _chunkData[x, y, z].Draw();
+        
+        Vector3 thisBlock = new Vector3(x, y, z);
+
+    }
+
+    public void EditBlock(Vector3 pos)
+    {
+        int x = Mathf.FloorToInt(pos.x);
+        int y = Mathf.FloorToInt(pos.y);
+        int z = Mathf.FloorToInt(pos.z);
+        _chunkData[x, y, z].UpdateBlockType(Block.BlockType.AIR);
+        UpdateBlock(x, y, z);
+
+    }
+
 
     public Chunk (Vector3 position, Material c)
     {
