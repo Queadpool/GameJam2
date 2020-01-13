@@ -10,6 +10,6 @@ public class Database : ScriptableObject
     [SerializeField] private GameObject _zombig = null;
 
     public GameObject Zombie { get { return _zombie; } }
-    public GameObject Hamemr_Zombie { get { return _hammerZombie; } }
+    public GameObject Hammer_Zombie { get { return _hammerZombie; } }
     public GameObject Zombig { get { return _zombig; } }
 }

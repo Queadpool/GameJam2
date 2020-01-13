@@ -16,10 +16,12 @@ public class ZombieStateController : MonoBehaviour
     [SerializeField] private EZombieState _currentState = EZombieState.SPAWN;
     [SerializeField] private Animator _animController = null;
     [SerializeField] private NavMeshAgent _nav = null;
+    [SerializeField] private int _health = 3;
 
     public EZombieState CurrentState { get { return _currentState; } }
     public Animator AnimController { get { return _animController; } }
     public NavMeshAgent Nav { get { return _nav; } }
+    public int Health { get { return _health; } }
 
     Dictionary<EZombieState, IBaseState> _states = null;
 
@@ -36,6 +38,11 @@ public class ZombieStateController : MonoBehaviour
     private void Update()
     {
         _states[CurrentState].Update();
+
+        if (Input.GetKeyDown(KeyCode.K))
+        {
+            ChangeState(EZombieState.DEAD);
+        }
     }
 
     public void ChangeState(EZombieState nextState)

@@ -15,7 +15,7 @@ public class ZombieSpawnState : IBaseState
 
     public void Enter()
     {
-
+        Debug.Log("SPAWN");
     }
 
     public void Update()
