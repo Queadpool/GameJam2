@@ -5,7 +5,7 @@ using UnityEngine;
 public class Block
 {
     enum Cubeside {BOTTOM, TOP, LEFT, RIGHT, FRONT, BACK};
-    public enum BlockType { GRASS, DIRT, STONE, DIAMOND, TREE, AIR };
+    public enum BlockType { GRASS, WOOD, DIRT, STONE, DIAMOND, AIR };
 
     [SerializeField] private Material _cubeMaterial = null;
     [SerializeField] private BlockType _bType = BlockType.GRASS;
@@ -24,6 +24,12 @@ public class Block
         
         /*GRASS SIDE*/ {new Vector2 (0.1875f, 0.9375f), new Vector2 (0.25f, 0.9375f),
                        new Vector2(0.1875f, 1.0f), new Vector2 (0.25f, 1.0f)},
+
+        /*WOOD SIDE*/ {new Vector2 (0.25f, 0.875f), new Vector2 (0.3125f, 0.875f),
+                       new Vector2(0.25f, 0.9375f), new Vector2 (0.3125f, 0.9375f)},
+
+        /*WOOD TOPBOT */ {new Vector2 (0.3125f, 0.875f), new Vector2 (0.375f, 0.875f),
+                       new Vector2(0.3125f, 0.9375f), new Vector2 (0.375f, 0.9375f)},
         
         /*DIRT*/ {new Vector2 (0.125f, 0.9375f), new Vector2 (0.1875f, 0.9375f),
                        new Vector2(0.125f, 1.0f), new Vector2 (0.1875f, 1.0f)},
@@ -33,6 +39,8 @@ public class Block
 
         /*DIAMOND*/ {new Vector2 (0.125f, 0.75f), new Vector2 (0.1875f, 0.75f),
                        new Vector2(0.125f, 0.8125f), new Vector2 (0.1875f, 0.8125f)}
+
+        //
     };
 
     public Block(BlockType b, Vector3 pos, GameObject p, Chunk o)
@@ -71,19 +79,41 @@ public class Block
             uv01 = blockUVs[0,2];
             uv11 = blockUVs[0,3];
         }
+        else if (_bType == BlockType.GRASS && side != Cubeside.BOTTOM && side != Cubeside.TOP)
+        {
+            uv00 = blockUVs[1, 0];
+            uv10 = blockUVs[1, 1];
+            uv01 = blockUVs[1, 2];
+            uv11 = blockUVs[1, 3];
+        }
         else if (_bType == BlockType.GRASS && side == Cubeside.BOTTOM)
         {
-            uv00 = blockUVs[(int)(BlockType.GRASS + 1), 0];
-            uv10 = blockUVs[(int)(BlockType.GRASS + 1), 1];
-            uv01 = blockUVs[(int)(BlockType.GRASS + 1), 2];
-            uv11 = blockUVs[(int)(BlockType.GRASS + 1), 3];
+            uv00 = blockUVs[4, 0];
+            uv10 = blockUVs[4, 1];
+            uv01 = blockUVs[4, 2];
+            uv11 = blockUVs[4, 3];
+        }
+        else if (_bType == BlockType.WOOD && (side == Cubeside.BOTTOM || side == Cubeside.TOP)) 
+        {
+            uv00 = blockUVs[3, 0];
+            uv10 = blockUVs[3, 1];
+            uv01 = blockUVs[3, 2];
+            uv11 = blockUVs[3, 3];
+        }
+
+        else if (_bType == BlockType.WOOD && side != Cubeside.BOTTOM && side != Cubeside.TOP)
+        {
+            uv00 = blockUVs[2, 0];
+            uv10 = blockUVs[2, 1];
+            uv01 = blockUVs[2, 2];
+            uv11 = blockUVs[2, 3];
         }
         else
         {
-            uv00 = blockUVs[(int)(_bType + 1), 0];
-            uv10 = blockUVs[(int)(_bType + 1), 1];
-            uv01 = blockUVs[(int)(_bType + 1), 2];
-            uv11 = blockUVs[(int)(_bType + 1), 3];
+            uv00 = blockUVs[(int)(_bType + 2), 0];
+            uv10 = blockUVs[(int)(_bType + 2), 1];
+            uv01 = blockUVs[(int)(_bType + 2), 2];
+            uv11 = blockUVs[(int)(_bType + 2), 3];
         }
 
         //all possible vertices
@@ -232,9 +262,22 @@ public class Block
         return false;
     }
 
-    public void UpdateBlockType(BlockType bType)
+    public void SetType(BlockType b)
     {
-        _bType = bType;
+        _bType = b;
+        if (_bType == BlockType.AIR)
+        {
+            isSolid = false;
+        }
+        else
+        {
+            isSolid = true;
+        }
+    }
+
+    public BlockType GetBlocktype()
+    {
+        return _bType;
     }
 
     public void Draw()

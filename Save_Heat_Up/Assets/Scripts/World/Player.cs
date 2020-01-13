@@ -123,14 +123,71 @@ public class Player : MonoBehaviour
 
         if (_highlightBlock.gameObject.activeSelf)
         {
-                Chunk chunk = null;
+
+
             //Destroy block
             if (Input.GetMouseButtonDown(0))
             {
-                //chunk.EditBlock(_highlightBlock.transform.position);
+                List<string> updates = new List<string>();
+
+            Block[,,] chunks;
+
+            int xChunck = Mathf.FloorToInt(_highlightBlock.transform.position.x);
+            int yChunck = Mathf.FloorToInt(_highlightBlock.transform.position.y);
+            int zChunck = Mathf.FloorToInt(_highlightBlock.transform.position.z);
+
+
+
+
+            string nName = null;
+            if (Utils.GetChunk(xChunck, yChunck, zChunck) != null)
+            {
+                nName = GetChunk(xChunck, yChunck, zChunck);
+                updates.Add(nName);
+
+                    if (xChunck == 0)
+                        updates.Add(World.BuildChunkName(new Vector3(xChunck - World._chunkSize, yChunck, zChunck)));
+                    if (xChunck == World._chunkSize - 1)
+                        updates.Add(World.BuildChunkName(new Vector3(xChunck + World._chunkSize, yChunck, zChunck)));
+
+                    if (yChunck == 0)
+                        updates.Add(World.BuildChunkName(new Vector3(xChunck, yChunck - World._chunkSize, zChunck)));
+                    if (yChunck == World._chunkSize - 1)
+                        updates.Add(World.BuildChunkName(new Vector3(xChunck, yChunck + World._chunkSize, zChunck)));
+
+                    if (zChunck == 0)
+                        updates.Add(World.BuildChunkName(new Vector3(xChunck - World._chunkSize, yChunck, zChunck)));
+                    if (zChunck == World._chunkSize - 1)
+                        updates.Add(World.BuildChunkName(new Vector3(xChunck + World._chunkSize, yChunck, zChunck)));
+
+
+
+
+
+
+                }
+
+
+            Chunk nChunk;
+
+            if (World._chunks.TryGetValue(nName, out nChunk))
+            {
+                chunks = nChunk._chunkData;
+            }
+            else
+            {
+                return;
             }
 
-            //PLace Block
+                //if (chunks[Utils.GetPositionInChunk(xCheck), Utils.GetPositionInChunk(yCheck), Utils.GetPositionInChunk(zCheck)].GetBlocktype() == Block.BlockType.WOOD)
+                DestroyImmediate(nChunk._Chunk.GetComponent<MeshFilter>());
+                DestroyImmediate(nChunk._Chunk.GetComponent<MeshRenderer>());
+                DestroyImmediate(nChunk._Chunk.GetComponent<Collider>());
+                chunks[Utils.GetPositionInChunk(xChunck), Utils.GetPositionInChunk(yChunck), Utils.GetPositionInChunk(zChunck)].SetType(Block.BlockType.AIR);
+                nChunk.DrawChunk();
+                }
+
+            //Place Block
         }
 
     }
@@ -315,7 +372,7 @@ public class Player : MonoBehaviour
         int zCheck = Mathf.FloorToInt(z);
 
         string nName = null;
-        if (GetChunk(xCheck, yCheck, zCheck) != null)
+        if (Utils.GetChunk(xCheck, yCheck, zCheck) != null)
         {
             nName = GetChunk(xCheck, yCheck, zCheck);
         }
@@ -331,9 +388,9 @@ public class Player : MonoBehaviour
             return false;
         }
 
-        int xPos = (xCheck % World._chunkSize);
-        int yPos = (yCheck % World._chunkSize);
-        int zPos = (zCheck % World._chunkSize);
+        int xPos = Utils.GetPositionInChunk(xCheck);
+        int yPos = Utils.GetPositionInChunk(yCheck);
+        int zPos = Utils.GetPositionInChunk(zCheck);
 
 
         try

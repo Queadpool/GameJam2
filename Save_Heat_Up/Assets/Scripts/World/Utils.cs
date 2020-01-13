@@ -4,16 +4,15 @@ using UnityEngine;
 
 public class Utils : MonoBehaviour
 {
-    private static int _maxHeight = 150;
+    private static int _maxHeight = World._columnHeight * 16;
     private static float _smooth = 0.0025f;
     private static float _cavesSmooth = 0.05f;
     private static int _octaves = 4;
     private static float _persistence = 0.5f;
 
-
     public static int GenerateStoneHeight(float x, float z)
     {
-        float height = Map(0, _maxHeight-10, 0, 1, fBM(x * _smooth * 2, z * _smooth * 2, _octaves + 1, _persistence));
+        float height = Map(0, _maxHeight * 0.9f, 0, 1, fBM(x * _smooth * 2, z * _smooth * 2, _octaves + 1, _persistence));
         return (int)height;
     }
 
@@ -58,5 +57,36 @@ public class Utils : MonoBehaviour
         }
 
         return total / maxValue; 
+    }
+
+    public static string GetChunk(float x, float y, float z)
+    {
+        int xChunk = FloatToInt(x) / World._chunkSize * 16;
+        int yChunk = FloatToInt(y) / World._chunkSize * 16;
+        int zChunk = FloatToInt(z) / World._chunkSize * 16;
+
+        Vector3 chunkPos = new Vector3(xChunk, yChunk, zChunk);
+
+        return World.BuildChunkName(chunkPos);
+    }
+
+    public static int GetPositionInChunk(float f)
+    {
+        int i = (FloatToInt(f) % World._chunkSize);
+
+        return i;
+    }
+
+    private static int FloatToInt(float f)
+    {
+        return Mathf.FloorToInt(f);
+    }
+
+    public static int GenerateTree(float f)
+    {
+        int yPos = GetPositionInChunk(f);
+
+        int treeRounds = World._chunkSize - yPos;
+        return treeRounds;
     }
 }

@@ -27,58 +27,74 @@ public class Chunk
                     int worldY = (int)(y + _chunk.transform.position.y);
                     int worldZ = (int)(z + _chunk.transform.position.z);
 
-                    if (Utils.fBM3D(worldX, worldY, worldZ, 0.05f, 3) < 0.42f)
+                    if (_chunkData[x, y, z] == null)
                     {
-                        _chunkData[x, y, z] = new Block(Block.BlockType.AIR,
-                                            pos,
-                                            _chunk.gameObject,
-                                            this);
-                    }                  
-                    else if (worldY <= Utils.GenerateStoneHeight(worldX, worldZ))
-                    {
-                        if (Utils.fBM3D(worldX, worldY, worldZ, 0.03f, 2) < 0.38f && worldY < 70 )
+                        if (Utils.fBM3D(worldX, worldY, worldZ, 0.05f, 3) < 0.42f)
                         {
-                            _chunkData[x, y, z] = new Block(Block.BlockType.DIAMOND,
+                            _chunkData[x, y, z] = new Block(Block.BlockType.AIR,
+                                                pos,
+                                                _chunk.gameObject,
+                                                this);
+                        }                  
+                        else if (worldY <= Utils.GenerateStoneHeight(worldX, worldZ))
+                        {
+                            if (Utils.fBM3D(worldX, worldY, worldZ, 0.03f, 2) < 0.38f && worldY < 70 )
+                            {
+                                _chunkData[x, y, z] = new Block(Block.BlockType.DIAMOND,
+                                                    pos,
+                                                    _chunk.gameObject,
+                                                    this);
+                            }
+                            else
+                            {
+                                _chunkData[x, y, z] = new Block(Block.BlockType.STONE,
+                                                    pos,
+                                                    _chunk.gameObject,
+                                                    this);
+                            }
+                        }
+                        else if (worldY < Utils.GenerateHeight(worldX, worldZ))
+                        {
+                            _chunkData[x,y,z] = new Block(Block.BlockType.DIRT,
+                                                pos,
+                                                _chunk.gameObject,
+                                                this);
+                        }
+                        else if (worldY == Utils.GenerateHeight(worldX, worldZ))
+                        {
+                            _chunkData[x, y, z] = new Block(Block.BlockType.GRASS,
+                                                pos,
+                                                _chunk.gameObject,
+                                                this);
+                        }
+                        else if (worldY == Utils.GenerateHeight(worldX, worldZ) + 1 && Utils.fBM3D(worldX, worldY, worldZ, 0.03f, 2) < 0.41f)
+                        {
+                            _chunkData[x, y, z] = new Block(Block.BlockType.WOOD,
                                                 pos,
                                                 _chunk.gameObject,
                                                 this);
                         }
                         else
                         {
-                            _chunkData[x, y, z] = new Block(Block.BlockType.STONE,
+                            //if (y > 0)
+                            //{
+
+                            //    if (_chunkData[x, y - 1, z].GetBlocktype() == Block.BlockType.WOOD)
+                            //    {
+                            //        _chunkData[x, y, z] = new Block(Block.BlockType.WOOD,
+                            //                            pos,
+                            //                            _chunk.gameObject,
+                            //                            this);
+                            //    }
+                            //}
+
+                                _chunkData[x, y, z] = new Block(Block.BlockType.AIR,
                                                 pos,
                                                 _chunk.gameObject,
                                                 this);
                         }
                     }
-                    else if (worldY < Utils.GenerateHeight(worldX, worldZ))
-                    {
-                        _chunkData[x,y,z] = new Block(Block.BlockType.DIRT,
-                                            pos,
-                                            _chunk.gameObject,
-                                            this);
-                    }
-                    else if (worldY == Utils.GenerateHeight(worldX, worldZ))
-                    {
-                        _chunkData[x, y, z] = new Block(Block.BlockType.GRASS,
-                                            pos,
-                                            _chunk.gameObject,
-                                            this);
-                    }
-                    else if (worldY == Utils.GenerateHeight(worldX, worldZ) + 1 && Utils.fBM3D(worldX, worldY, worldZ, 0.03f, 2) < 0.38f)
-                    {
-                        _chunkData[x, y, z] = new Block(Block.BlockType.STONE,
-                                            pos,
-                                            _chunk.gameObject,
-                                            this);
-                    }
-                    else
-                    {
-                        _chunkData[x, y, z] = new Block(Block.BlockType.AIR,
-                                            pos,
-                                            _chunk.gameObject,
-                                            this);
-                    }
+                    //Debug.Log("x:" + x + " y:" + y + " z:" + z + " block type :" + _chunkData[x, y, z].GetBlocktype());
                 }
             }
         }
@@ -114,7 +130,7 @@ public class Chunk
         int x = Mathf.FloorToInt(pos.x);
         int y = Mathf.FloorToInt(pos.y);
         int z = Mathf.FloorToInt(pos.z);
-        _chunkData[x, y, z].UpdateBlockType(Block.BlockType.AIR);
+        _chunkData[x, y, z].SetType(Block.BlockType.AIR);
         UpdateBlock(x, y, z);
 
     }
