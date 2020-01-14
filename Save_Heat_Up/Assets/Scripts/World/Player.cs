@@ -29,6 +29,10 @@ public class Player : MonoBehaviour
     [SerializeField] private float _checkIncrement = 0.025f;
     [SerializeField] private float _reach = 8f;
 
+    private int _stoneInventory = 0;
+    private int _woodInventory = 0;
+    private int _sommbieInventory = 0;
+
     private Block[,,] _lastPos = null;
 
     private float _gravity = -9.8f;
@@ -82,7 +86,7 @@ public class Player : MonoBehaviour
         {
             _isSprinting = true;
         }
-        
+
         if (Input.GetButtonUp("Sprint"))
         {
             _isSprinting = false;
@@ -106,7 +110,7 @@ public class Player : MonoBehaviour
                 _selectedBlockIndex--;
             }
 
-            if (_selectedBlockIndex > (_world.blockTypes.Length - 1)) 
+            if (_selectedBlockIndex > (_world.blockTypes.Length - 1))
             {
                 _selectedBlockIndex = 0;
             }
@@ -123,74 +127,126 @@ public class Player : MonoBehaviour
 
         if (_highlightBlock.gameObject.activeSelf)
         {
-
-
             //Destroy block
-            if (Input.GetMouseButtonDown(0))
+            if (Input.GetMouseButtonDown(1))
             {
                 List<string> updates = new List<string>();
 
-            Block[,,] chunks;
+                Block[,,] chunks;
 
-            int xChunck = Mathf.FloorToInt(_highlightBlock.transform.position.x);
-            int yChunck = Mathf.FloorToInt(_highlightBlock.transform.position.y);
-            int zChunck = Mathf.FloorToInt(_highlightBlock.transform.position.z);
+                int xChunck = Mathf.FloorToInt(_highlightBlock.transform.position.x);
+                int yChunck = Mathf.FloorToInt(_highlightBlock.transform.position.y);
+                int zChunck = Mathf.FloorToInt(_highlightBlock.transform.position.z);
 
+                string nName = null;
 
+                if (Utils.GetChunk(xChunck, yChunck, zChunck) != null)
+                {
+                    nName = GetChunk(xChunck, yChunck, zChunck);
+                    updates.Add(nName);
 
+                    if (Utils.GetPositionInChunk(xChunck) == 0)
+                        updates.Add(Utils.GetChunk(xChunck - World._chunkSize, yChunck, zChunck));
+                    if (Utils.GetPositionInChunk(xChunck) == World._chunkSize - 1)
+                        updates.Add(Utils.GetChunk(xChunck + World._chunkSize, yChunck, zChunck));
 
-            string nName = null;
-            if (Utils.GetChunk(xChunck, yChunck, zChunck) != null)
-            {
-                nName = GetChunk(xChunck, yChunck, zChunck);
-                updates.Add(nName);
+                    if (Utils.GetPositionInChunk(yChunck) == 0)
+                        updates.Add(Utils.GetChunk(xChunck, yChunck - World._chunkSize, zChunck));
+                    if (Utils.GetPositionInChunk(yChunck) == World._chunkSize - 1)
+                        updates.Add(Utils.GetChunk(xChunck, yChunck + World._chunkSize, zChunck));
 
-                    if (xChunck == 0)
-                        updates.Add(World.BuildChunkName(new Vector3(xChunck - World._chunkSize, yChunck, zChunck)));
-                    if (xChunck == World._chunkSize - 1)
-                        updates.Add(World.BuildChunkName(new Vector3(xChunck + World._chunkSize, yChunck, zChunck)));
-
-                    if (yChunck == 0)
-                        updates.Add(World.BuildChunkName(new Vector3(xChunck, yChunck - World._chunkSize, zChunck)));
-                    if (yChunck == World._chunkSize - 1)
-                        updates.Add(World.BuildChunkName(new Vector3(xChunck, yChunck + World._chunkSize, zChunck)));
-
-                    if (zChunck == 0)
-                        updates.Add(World.BuildChunkName(new Vector3(xChunck - World._chunkSize, yChunck, zChunck)));
-                    if (zChunck == World._chunkSize - 1)
-                        updates.Add(World.BuildChunkName(new Vector3(xChunck + World._chunkSize, yChunck, zChunck)));
+                    if (Utils.GetPositionInChunk(zChunck) == 0)
+                        updates.Add(Utils.GetChunk(xChunck, yChunck, zChunck - World._chunkSize));
+                    if (Utils.GetPositionInChunk(zChunck) == World._chunkSize - 1)
+                        updates.Add(Utils.GetChunk(xChunck, yChunck, zChunck + World._chunkSize));
 
 
 
+                    foreach (string cName in updates)
+                    {
+                        Chunk nChunk;
 
+                        if (World._chunks.TryGetValue(cName, out nChunk))
+                        {
+                            chunks = nChunk._chunkData;
+                            //if (chunks[Utils.GetPositionInChunk(xCheck), Utils.GetPositionInChunk(yCheck), Utils.GetPositionInChunk(zCheck)].GetBlocktype() == Block.BlockType.WOOD)
+                            DestroyImmediate(nChunk._Chunk.GetComponent<MeshFilter>());
+                            DestroyImmediate(nChunk._Chunk.GetComponent<MeshRenderer>());
+                            DestroyImmediate(nChunk._Chunk.GetComponent<Collider>());
 
-
+                            if (chunks[Utils.GetPositionInChunk(xChunck), Utils.GetPositionInChunk(yChunck), Utils.GetPositionInChunk(zChunck)].GetBlocktype() == Block.BlockType.WOOD) 
+                            {
+                                _woodInventory += 1;
+                            }
+                            else if (chunks[Utils.GetPositionInChunk(xChunck), Utils.GetPositionInChunk(yChunck), Utils.GetPositionInChunk(zChunck)].GetBlocktype() == Block.BlockType.STONE)
+                            {
+                                _stoneInventory += 1;
+                            }
+                            chunks[Utils.GetPositionInChunk(xChunck), Utils.GetPositionInChunk(yChunck), Utils.GetPositionInChunk(zChunck)].SetType(Block.BlockType.AIR);
+                            nChunk.DrawChunk();
+                        }
+                        else
+                        {
+                            return;
+                        }
+                    }
                 }
-
-
-            Chunk nChunk;
-
-            if (World._chunks.TryGetValue(nName, out nChunk))
-            {
-                chunks = nChunk._chunkData;
-            }
-            else
-            {
-                return;
             }
 
-                //if (chunks[Utils.GetPositionInChunk(xCheck), Utils.GetPositionInChunk(yCheck), Utils.GetPositionInChunk(zCheck)].GetBlocktype() == Block.BlockType.WOOD)
-                DestroyImmediate(nChunk._Chunk.GetComponent<MeshFilter>());
-                DestroyImmediate(nChunk._Chunk.GetComponent<MeshRenderer>());
-                DestroyImmediate(nChunk._Chunk.GetComponent<Collider>());
-                chunks[Utils.GetPositionInChunk(xChunck), Utils.GetPositionInChunk(yChunck), Utils.GetPositionInChunk(zChunck)].SetType(Block.BlockType.AIR);
-                nChunk.DrawChunk();
+            if (_placeBlock.gameObject.activeSelf)
+            {
+                if (Input.GetMouseButtonDown(0))
+                {
+                    Block[,,] chunks;
+
+                    int xChunck = Mathf.FloorToInt(_placeBlock.transform.position.x);
+                    int yChunck = Mathf.FloorToInt(_placeBlock.transform.position.y);
+                    int zChunck = Mathf.FloorToInt(_placeBlock.transform.position.z);
+
+                    string nName = null;
+
+                    if (Utils.GetChunk(xChunck, yChunck, zChunck) != null)
+                    {
+                        nName = GetChunk(xChunck, yChunck, zChunck);
+
+                        Chunk nChunk;
+
+                        if (World._chunks.TryGetValue(nName, out nChunk))
+                        {
+                            chunks = nChunk._chunkData;
+                            //if (chunks[Utils.GetPositionInChunk(xCheck), Utils.GetPositionInChunk(yCheck), Utils.GetPositionInChunk(zCheck)].GetBlocktype() == Block.BlockType.WOOD)
+                            DestroyImmediate(nChunk._Chunk.GetComponent<MeshFilter>());
+                            DestroyImmediate(nChunk._Chunk.GetComponent<MeshRenderer>());
+                            DestroyImmediate(nChunk._Chunk.GetComponent<Collider>());
+
+                            if (_world.blockTypes[_selectedBlockIndex] == "WOOD")
+                            {
+                                chunks[Utils.GetPositionInChunk(xChunck), Utils.GetPositionInChunk(yChunck), Utils.GetPositionInChunk(zChunck)].SetType(Block.BlockType.WOOD);
+                            }
+                            else if (_world.blockTypes[_selectedBlockIndex] == "STONE")
+                            {
+                                chunks[Utils.GetPositionInChunk(xChunck), Utils.GetPositionInChunk(yChunck), Utils.GetPositionInChunk(zChunck)].SetType(Block.BlockType.STONE);
+                            }
+                            else if (_world.blockTypes[_selectedBlockIndex] == "GRASS")
+                            {
+                                chunks[Utils.GetPositionInChunk(xChunck), Utils.GetPositionInChunk(yChunck), Utils.GetPositionInChunk(zChunck)].SetType(Block.BlockType.GRASS);
+                            }
+                            else if (_world.blockTypes[_selectedBlockIndex] == "DIRT")
+                            {
+                                chunks[Utils.GetPositionInChunk(xChunck), Utils.GetPositionInChunk(yChunck), Utils.GetPositionInChunk(zChunck)].SetType(Block.BlockType.DIRT);
+                            }
+                            nChunk.DrawChunk();
+                        }
+                        else
+                        {
+                            return;
+                        }
+                    }
                 }
-
-            //Place Block
+            }
         }
-
     }
+
 
 
     private void PlaceCursorBlocks()
