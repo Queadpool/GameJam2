@@ -635,7 +635,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9c71e5db3db4d2a45bbdb94de48edec7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _timerSpawn: 5
+  _timerSpawn: 2
   _waveCounter: 0
   _sSpawn0: {fileID: 195173050}
   _sSpawn1: {fileID: 970648120}

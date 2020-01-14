@@ -6,11 +6,11 @@ using QQ.Utils;
 public class WavesManager : MonoBehaviour
 {
     private Timer _timer = null;
-    [SerializeField] private float _timerSpawn = 5.0f;
+    [SerializeField] private float _timerSpawn = 2.0f;
     [SerializeField] private int _waveCounter = 0;
     private int _score = 0;
-    private bool _waveCleared = false;
-    private bool _timerOn = false;
+    private bool _waveCleared = true;
+    private bool _canSpawn = false;
 
     [Header("South")]
     [SerializeField] private Transform _sSpawn0 = null;
@@ -43,25 +43,96 @@ public class WavesManager : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        Debug.Log("Score : " + _score);
+        Debug.Log(_timer.TimeLeft);
+
         _score = LevelManager.Instance.Score;
 
-        if (_waveCleared == true)
+        if (_canSpawn)
         {
-            SpawnZombie();
-            _waveCounter++;
             _waveCleared = false;
-            _timerOn = false;
+            _canSpawn = false;
+            SpawnZombie();
         }
 
-        if ((_score == 3) && (_timerOn == false))
+        CheckWaveTimer();
+        CheckScore();
+    }
+    
+    private void CheckScore()
+    {
+        switch (_score)
         {
-            _timer.ResetTimer(_timerSpawn);
-            _timerOn = true;
-        }
+            case 2:
+                if(_waveCounter == 0)
+                {
+                    _waveCleared = true;
+                    _timer.ResetTimer(_timerSpawn);
+                    _waveCounter++;
+                }
+                break;
 
-        if (_timer.TimeLeft <= 0)
+            case 6:
+                if (_waveCounter == 1)
+                {
+                    _waveCleared = true;
+                    _timer.ResetTimer(_timerSpawn);
+                    _waveCounter++;
+                }
+                break;
+
+            case 12:
+                if (_waveCounter == 2)
+                {
+                    _waveCleared = true;
+                    _timer.ResetTimer(_timerSpawn);
+                    _waveCounter++;
+                }
+                break;
+
+            case 22:
+                if (_waveCounter == 3)
+                {
+                    _waveCleared = true;
+                    _timer.ResetTimer(_timerSpawn);
+                    _waveCounter++;
+                }
+                break;
+
+            case 33:
+                if (_waveCounter == 4)
+                {
+                    _waveCleared = true;
+                    _timer.ResetTimer(_timerSpawn);
+                    _waveCounter++;
+                }
+                break;
+
+            case 46:
+                if (_waveCounter == 5)
+                {
+                    _waveCleared = true;
+                    _timer.ResetTimer(_timerSpawn);
+                    _waveCounter++;
+                }
+                break;
+
+            case 60:
+                break;
+
+            default:
+                break;
+        }
+    }
+
+    private void CheckWaveTimer()
+    {
+        if (_waveCleared)
         {
-            _waveCleared = true;
+            if (_timer.TimeLeft <= 0)
+            {
+                _canSpawn = true;
+            }
         }
     }
 
@@ -123,21 +194,78 @@ public class WavesManager : MonoBehaviour
                     newZombie9.transform.position = _eSpawn1.position;
                     GameObject newZombie10 = Instantiate(zombie);
                     newZombie10.transform.position = _eSpawn3.position;
-                    GameObject newHammerZombie = Instantiate(hammerZombie);
-                    newHammerZombie.transform.position = _oSpawn2.position;
-                    newHammerZombie.transform.Rotate(0, 180, 0);
+                    GameObject newHammerZombie0 = Instantiate(hammerZombie);
+                    newHammerZombie0.transform.position = _oSpawn2.position;
+                    newHammerZombie0.transform.Rotate(0, 180, 0);
                     break;
 
                 case 3:
+                    GameObject newZombie11 = Instantiate(zombie);
+                    newZombie11.transform.position = _sSpawn0.position;
+                    newZombie11.transform.Rotate(0, 90, 0);
+                    GameObject newZombie12 = Instantiate(zombie);
+                    newZombie12.transform.position = _sSpawn1.position;
+                    newZombie12.transform.Rotate(0, 90, 0);
+                    GameObject newZombie13 = Instantiate(zombie);
+                    newZombie13.transform.position = _sSpawn3.position;
+                    newZombie13.transform.Rotate(0, 90, 0);
+                    GameObject newZombie14 = Instantiate(zombie);
+                    newZombie14.transform.position = _sSpawn4.position;
+                    newZombie14.transform.Rotate(0, 90, 0);
+                    GameObject newZombie15 = Instantiate(zombie);
+                    newZombie15.transform.position = _eSpawn2.position;
+                    GameObject newZombie16 = Instantiate(zombie);
+                    newZombie16.transform.position = _eSpawn3.position;
+                    GameObject newZombie17 = Instantiate(zombie);
+                    newZombie17.transform.position = _eSpawn4.position;
+                    GameObject newHammerZombie1 = Instantiate(hammerZombie);
+                    newHammerZombie1.transform.position = _eSpawn0.position;
+                    GameObject newZombie18 = Instantiate(zombie);
+                    newZombie18.transform.position = _oSpawn4.position;
+                    newZombie18.transform.Rotate(0, 180, 0);
+                    GameObject newHammerZombie2 = Instantiate(hammerZombie);
+                    newHammerZombie2.transform.position = _oSpawn1.position;
+                    newHammerZombie2.transform.Rotate(0, 180, 0);
                     break;
 
                 case 4:
+                    GameObject newZombig0 = Instantiate(zombig);
+                    newZombig0.transform.position = _sSpawn2.position;
+                    newZombig0.transform.Rotate(0, 90, 0);
+                    GameObject newZombie19 = Instantiate(zombie);
+                    newZombie19.transform.position = _eSpawn0.position;
+                    GameObject newZombie20 = Instantiate(zombie);
+                    newZombie20.transform.position = _eSpawn1.position;
+                    GameObject newZombie21 = Instantiate(zombie);
+                    newZombie21.transform.position = _eSpawn2.position;
+                    GameObject newZombie22 = Instantiate(zombie);
+                    newZombie22.transform.position = _eSpawn3.position;
+                    GameObject newZombie23 = Instantiate(zombie);
+                    newZombie23.transform.position = _eSpawn4.position;
+                    GameObject newZombie24 = Instantiate(zombie);
+                    newZombie24.transform.position = _oSpawn0.position;
+                    newZombie24.transform.Rotate(0, 180, 0);
+                    GameObject newZombie25 = Instantiate(zombie);
+                    newZombie25.transform.position = _oSpawn1.position;
+                    newZombie25.transform.Rotate(0, 180, 0);
+                    GameObject newZombie26 = Instantiate(zombie);
+                    newZombie26.transform.position = _oSpawn2.position;
+                    newZombie26.transform.Rotate(0, 180, 0);
+                    GameObject newZombie27 = Instantiate(zombie);
+                    newZombie27.transform.position = _oSpawn3.position;
+                    newZombie27.transform.Rotate(0, 180, 0);
+                    GameObject newZombie28 = Instantiate(zombie);
+                    newZombie28.transform.position = _oSpawn4.position;
+                    newZombie28.transform.Rotate(0, 180, 0);
                     break;
 
                 case 5:
                     break;
 
                 case 6:
+                    break;
+
+                default:
                     break;
             }
         }
