@@ -5,9 +5,8 @@ using UnityEngine;
 public class Utils : MonoBehaviour
 {
     private static int _maxHeight = World._columnHeight * 16;
-    private static float _smooth = 0.0025f;
-    private static float _cavesSmooth = 0.05f;
-    private static int _octaves = 4;
+    private static float _smooth = 0.0001f;
+    private static int _octaves = 16;
     private static float _persistence = 0.5f;
 
     public static int GenerateStoneHeight(float x, float z)

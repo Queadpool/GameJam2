@@ -5,10 +5,9 @@ using UnityEngine;
 public class Block
 {
     enum Cubeside {BOTTOM, TOP, LEFT, RIGHT, FRONT, BACK};
-    public enum BlockType { GRASS, WOOD, DIRT, STONE, DIAMOND, AIR };
+    public enum BlockType { GRASS, WOOD, DIRT, STONE, DIAMOND, ZOMBIE , BUILD, AIR, OBSTACLE, NOTHING };
 
-    [SerializeField] private Material _cubeMaterial = null;
-    [SerializeField] private BlockType _bType = BlockType.GRASS;
+    public BlockType _bType = BlockType.NOTHING;
 
     private bool isSolid = false;
     public bool IsSolid { get { return isSolid; }}
@@ -38,7 +37,10 @@ public class Block
                        new Vector2(0, 0.9375f), new Vector2 (0.0625f, 0.9375f)},
 
         /*DIAMOND*/ {new Vector2 (0.125f, 0.75f), new Vector2 (0.1875f, 0.75f),
-                       new Vector2(0.125f, 0.8125f), new Vector2 (0.1875f, 0.8125f)}
+                       new Vector2(0.125f, 0.8125f), new Vector2 (0.1875f, 0.8125f)},
+
+        /*ZOMBIE*/ {new Vector2 (0.0625f, 0.375f), new Vector2 (0.125f, 0.375f),
+                       new Vector2(0.0625f, 0.4375f), new Vector2 (0.125f, 0.4375f)}
 
         //
     };
@@ -265,7 +267,7 @@ public class Block
     public void SetType(BlockType b)
     {
         _bType = b;
-        if (_bType == BlockType.AIR)
+        if (_bType == BlockType.AIR || _bType == BlockType.OBSTACLE)
         {
             isSolid = false;
         }
@@ -277,12 +279,18 @@ public class Block
 
     public BlockType GetBlocktype()
     {
+        if (_bType != BlockType.NOTHING)
         return _bType;
+        else
+        {
+            return BlockType.NOTHING;
+        }
+
     }
 
     public void Draw()
     {
-        if (_bType == BlockType.AIR) return;
+        if (_bType == BlockType.AIR || _bType == BlockType.OBSTACLE) return;
 
         if(!HasSolidNeighbour((int)_position.x, (int)_position.y, (int)_position.z + 1))
             CreateQuad(Cubeside.FRONT);

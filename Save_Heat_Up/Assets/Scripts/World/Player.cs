@@ -21,7 +21,7 @@ public class Player : MonoBehaviour
 
     [SerializeField] private float _mouseVelocity = 2f;
 
-    [SerializeField] private float _playerWidth = 0.1f;
+    [SerializeField] private float _playerWidth = 0.2f;
     [SerializeField] private float _boundsTolerance = 0.1f;
     [SerializeField] private bool _isGrounded = false;
     [SerializeField] private bool _isSprinting = false;
@@ -29,9 +29,13 @@ public class Player : MonoBehaviour
     [SerializeField] private float _checkIncrement = 0.025f;
     [SerializeField] private float _reach = 8f;
 
+    [SerializeField] GameObject _herse = null;
+    [SerializeField] GameObject _zombieHerse = null;
+
+
     private int _stoneInventory = 0;
     private int _woodInventory = 0;
-    private int _sommbieInventory = 0;
+    private int _zommbieInventory = 0;
 
     private Block[,,] _lastPos = null;
 
@@ -169,7 +173,10 @@ public class Player : MonoBehaviour
                         if (World._chunks.TryGetValue(cName, out nChunk))
                         {
                             chunks = nChunk._chunkData;
-                            //if (chunks[Utils.GetPositionInChunk(xCheck), Utils.GetPositionInChunk(yCheck), Utils.GetPositionInChunk(zCheck)].GetBlocktype() == Block.BlockType.WOOD)
+                            //if (chunks[Utils.GetPositionInChunk(xChunck), Utils.GetPositionInChunk(yChunck), Utils.GetPositionInChunk(zChunck)].GetBlocktype() == Block.BlockType.WOOD || chunks[Utils.GetPositionInChunk(xChunck), Utils.GetPositionInChunk(yChunck), Utils.GetPositionInChunk(zChunck)].GetBlocktype() == Block.BlockType.STONE)
+                            //{
+
+                            //}
                             DestroyImmediate(nChunk._Chunk.GetComponent<MeshFilter>());
                             DestroyImmediate(nChunk._Chunk.GetComponent<MeshRenderer>());
                             DestroyImmediate(nChunk._Chunk.GetComponent<Collider>());
@@ -219,21 +226,103 @@ public class Player : MonoBehaviour
                             DestroyImmediate(nChunk._Chunk.GetComponent<MeshRenderer>());
                             DestroyImmediate(nChunk._Chunk.GetComponent<Collider>());
 
-                            if (_world.blockTypes[_selectedBlockIndex] == "WOOD")
+                            if (_world.blockTypes[_selectedBlockIndex] == "WOOD" && _woodInventory > 0)
                             {
+                                _woodInventory -= 1;
+
                                 chunks[Utils.GetPositionInChunk(xChunck), Utils.GetPositionInChunk(yChunck), Utils.GetPositionInChunk(zChunck)].SetType(Block.BlockType.WOOD);
+
+                                if (chunks[Utils.GetPositionInChunk(xChunck - 1), Utils.GetPositionInChunk(yChunck), Utils.GetPositionInChunk(zChunck)].GetBlocktype() == Block.BlockType.WOOD)
+                                {
+                                    chunks[Utils.GetPositionInChunk(xChunck), Utils.GetPositionInChunk(yChunck), Utils.GetPositionInChunk(zChunck)].SetType(Block.BlockType.OBSTACLE);
+                                    chunks[Utils.GetPositionInChunk(xChunck - 1), Utils.GetPositionInChunk(yChunck), Utils.GetPositionInChunk(zChunck)].SetType(Block.BlockType.OBSTACLE);
+                                    Vector3 pos = new Vector3(_placeBlock.position.x, _placeBlock.position.y, _placeBlock.position.z + 0.5f);
+
+                                    if ((chunks[Utils.GetPositionInChunk(xChunck), Utils.GetPositionInChunk(yChunck - 1), Utils.GetPositionInChunk(zChunck)].GetBlocktype() != Block.BlockType.ZOMBIE))
+                                    {
+                                        Instantiate(_herse, pos, Quaternion.identity);
+                                    }
+                                    else if ((chunks[Utils.GetPositionInChunk(xChunck), Utils.GetPositionInChunk(yChunck - 1), Utils.GetPositionInChunk(zChunck)].GetBlocktype() == Block.BlockType.ZOMBIE) && (chunks[Utils.GetPositionInChunk(xChunck - 1), Utils.GetPositionInChunk(yChunck - 1), Utils.GetPositionInChunk(zChunck)].GetBlocktype() == Block.BlockType.ZOMBIE))
+                                    {
+                                        chunks[Utils.GetPositionInChunk(xChunck), Utils.GetPositionInChunk(yChunck - 1), Utils.GetPositionInChunk(zChunck)].SetType(Block.BlockType.OBSTACLE);
+                                        chunks[Utils.GetPositionInChunk(xChunck - 1), Utils.GetPositionInChunk(yChunck - 1), Utils.GetPositionInChunk(zChunck)].SetType(Block.BlockType.OBSTACLE);
+
+                                        pos.y = pos.y - 1;
+
+                                        Instantiate(_zombieHerse, pos, Quaternion.identity);
+                                    }
+                                }
+                                else if (chunks[Utils.GetPositionInChunk(xChunck + 1), Utils.GetPositionInChunk(yChunck), Utils.GetPositionInChunk(zChunck)].GetBlocktype() == Block.BlockType.WOOD)
+                                {
+                                    chunks[Utils.GetPositionInChunk(xChunck), Utils.GetPositionInChunk(yChunck), Utils.GetPositionInChunk(zChunck)].SetType(Block.BlockType.OBSTACLE);
+                                    chunks[Utils.GetPositionInChunk(xChunck + 1), Utils.GetPositionInChunk(yChunck), Utils.GetPositionInChunk(zChunck)].SetType(Block.BlockType.OBSTACLE);
+                                    Vector3 pos = new Vector3(_placeBlock.position.x + 1, _placeBlock.position.y, _placeBlock.position.z + 0.5f);
+
+                                    if ((chunks[Utils.GetPositionInChunk(xChunck), Utils.GetPositionInChunk(yChunck - 1), Utils.GetPositionInChunk(zChunck)].GetBlocktype() != Block.BlockType.ZOMBIE))
+                                    {
+                                        Instantiate(_herse, pos, Quaternion.identity);
+                                    }
+                                    else if ((chunks[Utils.GetPositionInChunk(xChunck), Utils.GetPositionInChunk(yChunck - 1), Utils.GetPositionInChunk(zChunck)].GetBlocktype() == Block.BlockType.ZOMBIE) && (chunks[Utils.GetPositionInChunk(xChunck + 1), Utils.GetPositionInChunk(yChunck - 1), Utils.GetPositionInChunk(zChunck)].GetBlocktype() == Block.BlockType.ZOMBIE))
+                                    {
+                                        chunks[Utils.GetPositionInChunk(xChunck), Utils.GetPositionInChunk(yChunck - 1), Utils.GetPositionInChunk(zChunck)].SetType(Block.BlockType.OBSTACLE);
+                                        chunks[Utils.GetPositionInChunk(xChunck + 1), Utils.GetPositionInChunk(yChunck - 1), Utils.GetPositionInChunk(zChunck)].SetType(Block.BlockType.OBSTACLE);
+
+                                        pos.y = pos.y - 1;
+
+                                        Instantiate(_zombieHerse, pos, Quaternion.identity);
+                                    }
+                                }
+                                else if (chunks[Utils.GetPositionInChunk(xChunck), Utils.GetPositionInChunk(yChunck), Utils.GetPositionInChunk(zChunck - 1)].GetBlocktype() == Block.BlockType.WOOD)
+                                {
+                                    chunks[Utils.GetPositionInChunk(xChunck), Utils.GetPositionInChunk(yChunck), Utils.GetPositionInChunk(zChunck)].SetType(Block.BlockType.OBSTACLE);
+                                    chunks[Utils.GetPositionInChunk(xChunck), Utils.GetPositionInChunk(yChunck), Utils.GetPositionInChunk(zChunck - 1)].SetType(Block.BlockType.OBSTACLE);
+                                    Vector3 pos = new Vector3(_placeBlock.position.x + 0.5f, _placeBlock.position.y, _placeBlock.position.z);
+
+                                    if ((chunks[Utils.GetPositionInChunk(xChunck), Utils.GetPositionInChunk(yChunck - 1), Utils.GetPositionInChunk(zChunck)].GetBlocktype() == Block.BlockType.WOOD))
+                                    {
+                                        Instantiate(_herse, pos, Quaternion.Euler(0, 90, 0));
+                                    }
+                                    else if ((chunks[Utils.GetPositionInChunk(xChunck), Utils.GetPositionInChunk(yChunck - 1), Utils.GetPositionInChunk(zChunck - 1)].GetBlocktype() == Block.BlockType.ZOMBIE) && (chunks[Utils.GetPositionInChunk(xChunck), Utils.GetPositionInChunk(yChunck - 1), Utils.GetPositionInChunk(zChunck - 1)].GetBlocktype() == Block.BlockType.ZOMBIE))
+                                    {
+                                        chunks[Utils.GetPositionInChunk(xChunck), Utils.GetPositionInChunk(yChunck - 1), Utils.GetPositionInChunk(zChunck)].SetType(Block.BlockType.OBSTACLE);
+                                        chunks[Utils.GetPositionInChunk(xChunck), Utils.GetPositionInChunk(yChunck - 1), Utils.GetPositionInChunk(zChunck - 1)].SetType(Block.BlockType.OBSTACLE);
+
+                                        pos.y = pos.y - 1;
+
+                                        Instantiate(_zombieHerse, pos, Quaternion.Euler(0, 90, 0));
+                                    }
+                                }
+                                else if (chunks[Utils.GetPositionInChunk(xChunck), Utils.GetPositionInChunk(yChunck), Utils.GetPositionInChunk(zChunck + 1)].GetBlocktype() == Block.BlockType.WOOD)
+                                {
+                                    chunks[Utils.GetPositionInChunk(xChunck), Utils.GetPositionInChunk(yChunck), Utils.GetPositionInChunk(zChunck)].SetType(Block.BlockType.OBSTACLE);
+                                    chunks[Utils.GetPositionInChunk(xChunck), Utils.GetPositionInChunk(yChunck), Utils.GetPositionInChunk(zChunck + 1)].SetType(Block.BlockType.OBSTACLE);
+                                    Vector3 pos = new Vector3(_placeBlock.position.x, _placeBlock.position.y, _placeBlock.position.z + 0.5f);
+
+                                    if ((chunks[Utils.GetPositionInChunk(xChunck), Utils.GetPositionInChunk(yChunck - 1), Utils.GetPositionInChunk(zChunck)].GetBlocktype() == Block.BlockType.WOOD))
+                                    {
+                                        Instantiate(_herse, pos, Quaternion.Euler(0, 90, 0));
+                                    }
+                                    else if ((chunks[Utils.GetPositionInChunk(xChunck), Utils.GetPositionInChunk(yChunck - 1), Utils.GetPositionInChunk(zChunck + 1)].GetBlocktype() == Block.BlockType.ZOMBIE) && (chunks[Utils.GetPositionInChunk(xChunck), Utils.GetPositionInChunk(yChunck - 1), Utils.GetPositionInChunk(zChunck + 1)].GetBlocktype() == Block.BlockType.ZOMBIE))
+                                    {
+                                        chunks[Utils.GetPositionInChunk(xChunck), Utils.GetPositionInChunk(yChunck - 1), Utils.GetPositionInChunk(zChunck)].SetType(Block.BlockType.OBSTACLE);
+                                        chunks[Utils.GetPositionInChunk(xChunck), Utils.GetPositionInChunk(yChunck - 1), Utils.GetPositionInChunk(zChunck + 1)].SetType(Block.BlockType.OBSTACLE);
+
+                                        pos.y = pos.y - 1;
+
+                                        Instantiate(_zombieHerse, pos, Quaternion.Euler(0, 90, 0));
+                                    }
+                                }
+
                             }
-                            else if (_world.blockTypes[_selectedBlockIndex] == "STONE")
+                            else if (_world.blockTypes[_selectedBlockIndex] == "STONE" && _stoneInventory > 0)
                             {
+                                _stoneInventory -= 1;
                                 chunks[Utils.GetPositionInChunk(xChunck), Utils.GetPositionInChunk(yChunck), Utils.GetPositionInChunk(zChunck)].SetType(Block.BlockType.STONE);
                             }
-                            else if (_world.blockTypes[_selectedBlockIndex] == "GRASS")
+
+                            else if (_world.blockTypes[_selectedBlockIndex] == "ZOMBIE")
                             {
-                                chunks[Utils.GetPositionInChunk(xChunck), Utils.GetPositionInChunk(yChunck), Utils.GetPositionInChunk(zChunck)].SetType(Block.BlockType.GRASS);
-                            }
-                            else if (_world.blockTypes[_selectedBlockIndex] == "DIRT")
-                            {
-                                chunks[Utils.GetPositionInChunk(xChunck), Utils.GetPositionInChunk(yChunck), Utils.GetPositionInChunk(zChunck)].SetType(Block.BlockType.DIRT);
+                                chunks[Utils.GetPositionInChunk(xChunck), Utils.GetPositionInChunk(yChunck), Utils.GetPositionInChunk(zChunck)].SetType(Block.BlockType.ZOMBIE);
                             }
                             nChunk.DrawChunk();
                         }
@@ -265,7 +354,36 @@ public class Player : MonoBehaviour
 
                 _placeBlock.position = lastPos;
 
+                Block[,,] chunks;
+                Block[,,] pchunks;
+
+
+                string hbName = GetChunk(_highlightBlock.position.x, _highlightBlock.position.y, _highlightBlock.position.z);
+                string pName = GetChunk(_placeBlock.position.x, _placeBlock.position.y, _placeBlock.position.z);
+
+
+                Chunk nChunk;
+                Chunk pChunk;
+
+                int xPos = Utils.GetPositionInChunk(_highlightBlock.position.x);
+                int yPos = Utils.GetPositionInChunk(_highlightBlock.position.y);
+                int zPos = Utils.GetPositionInChunk(_highlightBlock.position.z);
+
+                int xPosp = Utils.GetPositionInChunk(_placeBlock.position.x);
+                int yPosp = Utils.GetPositionInChunk(_placeBlock.position.y);
+                int zPosp = Utils.GetPositionInChunk(_placeBlock.position.z);
+
+                World._chunks.TryGetValue(hbName, out nChunk);
+                chunks = nChunk._chunkData;
+
+                World._chunks.TryGetValue(pName, out pChunk);
+                pchunks = nChunk._chunkData;
+
+                if (chunks[xPos, yPos, zPos].GetBlocktype() == Block.BlockType.WOOD || chunks[xPos, yPos, zPos].GetBlocktype() == Block.BlockType.STONE || chunks[xPos, yPos, zPos].GetBlocktype() == Block.BlockType.ZOMBIE)
                 _highlightBlock.gameObject.SetActive(true);
+
+
+                if ((chunks[xPos, yPos, zPos].GetBlocktype() == Block.BlockType.WOOD || chunks[xPos, yPos, zPos].GetBlocktype() == Block.BlockType.ZOMBIE) && pchunks[xPosp, yPosp, zPosp].GetBlocktype() == Block.BlockType.AIR)
                 _placeBlock.gameObject.SetActive(true);
                 return;
             }
@@ -319,7 +437,10 @@ public class Player : MonoBehaviour
 
     private float CheckDownSpeed (float downSpeed)
     {
-        if (CheckVoxel(transform.position.x, transform.position.y + downSpeed, transform.position.z))
+        if (CheckVoxel(transform.position.x - _playerWidth, transform.position.y + downSpeed, transform.position.z - _playerWidth) ||
+            CheckVoxel(transform.position.x + _playerWidth, transform.position.y + downSpeed, transform.position.z - _playerWidth) ||
+            CheckVoxel(transform.position.x + _playerWidth, transform.position.y + downSpeed, transform.position.z + _playerWidth) ||
+            CheckVoxel(transform.position.x - _playerWidth, transform.position.y + downSpeed, transform.position.z + _playerWidth))
         {
             _isGrounded = true;
             return 0;
@@ -333,7 +454,10 @@ public class Player : MonoBehaviour
 
     private float CheckUpSpeed(float upSpeed)
     {
-        if  (CheckVoxel(transform.position.x , transform.position.y + 2f + upSpeed, transform.position.z))
+        if (CheckVoxel(transform.position.x - _playerWidth, transform.position.y + 2f + upSpeed, transform.position.z - _playerWidth) ||
+            CheckVoxel(transform.position.x + _playerWidth, transform.position.y + 2f + upSpeed, transform.position.z - _playerWidth) ||
+            CheckVoxel(transform.position.x + _playerWidth, transform.position.y + 2f + upSpeed, transform.position.z + _playerWidth) ||
+            CheckVoxel(transform.position.x - _playerWidth, transform.position.y + 2f + upSpeed, transform.position.z + _playerWidth))
         {
             return 0;
         }
@@ -355,8 +479,8 @@ public class Player : MonoBehaviour
         get
         {
             if  (
-                CheckVoxel(transform.position.x, transform.position.y, transform.position.z) ||
-                CheckVoxel(transform.position.x, transform.position.y +1f, transform.position.z) 
+                CheckVoxel(transform.position.x, transform.position.y, transform.position.z + _playerWidth) ||
+                CheckVoxel(transform.position.x, transform.position.y +1f, transform.position.z + _playerWidth) 
                 )
             {
                 return true;
@@ -372,8 +496,8 @@ public class Player : MonoBehaviour
         get
         {
             if (
-                CheckVoxel(transform.position.x, transform.position.y, transform.position.z) ||
-                CheckVoxel(transform.position.x, transform.position.y + 1f, transform.position.z)
+                CheckVoxel(transform.position.x, transform.position.y, transform.position.z - _playerWidth) ||
+                CheckVoxel(transform.position.x, transform.position.y + 1f, transform.position.z - _playerWidth)
                 )
             {
                 return true;
@@ -389,8 +513,8 @@ public class Player : MonoBehaviour
         get
         {
             if (
-                CheckVoxel(transform.position.x, transform.position.y, transform.position.z) ||
-                CheckVoxel(transform.position.x, transform.position.y + 1f, transform.position.z)
+                CheckVoxel(transform.position.x + _playerWidth, transform.position.y, transform.position.z) ||
+                CheckVoxel(transform.position.x + _playerWidth, transform.position.y + 1f, transform.position.z)
                 )
             {
                 return true;
@@ -406,8 +530,8 @@ public class Player : MonoBehaviour
         get
         {
             if (
-                CheckVoxel(transform.position.x, transform.position.y, transform.position.z) ||
-                CheckVoxel(transform.position.x, transform.position.y + 1f, transform.position.z)
+                CheckVoxel(transform.position.x - _playerWidth, transform.position.y, transform.position.z) ||
+                CheckVoxel(transform.position.x - _playerWidth, transform.position.y + 1f, transform.position.z)
                 )
             {
                 return true;
@@ -458,7 +582,7 @@ public class Player : MonoBehaviour
         return false;
     }
 
-    private string GetChunk(int x, int y, int z)
+    private string GetChunk(float x, float y, float z)
     {
         int xChunk = Mathf.FloorToInt(x / World._chunkSize) * 16;
         int yChunk = Mathf.FloorToInt(y / World._chunkSize) * 16;
@@ -469,5 +593,4 @@ public class Player : MonoBehaviour
 
         return World.BuildChunkName(chunkPos);
     }
-
 }

@@ -9,7 +9,6 @@ public class Chunk
     public GameObject _Chunk { get { return _chunk; } }
     public Block[,,] _chunkData = null;
 
-
     private  void BuildChunk()
     {
         _chunkData = new Block[World._chunkSize, World._chunkSize, World._chunkSize];
@@ -29,7 +28,7 @@ public class Chunk
 
                     if (_chunkData[x, y, z] == null)
                     {
-                        if (Utils.fBM3D(worldX, worldY, worldZ, 0.05f, 3) < 0.42f)
+                        if (Utils.fBM3D(worldX, worldY, worldZ, 0.025f, 3) < 0.42f)
                         {
                             _chunkData[x, y, z] = new Block(Block.BlockType.AIR,
                                                 pos,
@@ -141,7 +140,7 @@ public class Chunk
         _chunk = new GameObject(World.BuildChunkName(position));
         _chunk.transform.position = position;
         _cubeMaterial = c;
-        BuildChunk();
+            BuildChunk();
     }
 
     private void CombineQuads()

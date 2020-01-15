@@ -553,12 +553,15 @@ MonoBehaviour:
   _sprintSpeed: 6
   _jumpForce: 6
   _mouseVelocity: 2
-  _playerWidth: 1
+  _playerWidth: 0.4
   _boundsTolerance: 0.1
   _isGrounded: 0
   _isSprinting: 0
   _checkIncrement: 0.001
   _reach: 5
+  _herse: {fileID: 4742734816524182276, guid: 93920d821371d6142aab61601205279b, type: 3}
+  _zombieHerse: {fileID: 1807950379956808539, guid: bf3db3b066f5d6d4687954733171e6be,
+    type: 3}
 --- !u!4 &1364834318
 Transform:
   m_ObjectHideFlags: 0
@@ -567,7 +570,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1364834316}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 12, y: 46, z: 22}
+  m_LocalPosition: {x: 12, y: 92, z: 22}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 1752634051}
