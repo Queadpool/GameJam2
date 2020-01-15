@@ -1,1 +1,5 @@
+<<<<<<< HEAD
 ﻿{"cameraMode":{"drawMode":0,"name":"Shaded","section":"Shading Mode"},"sceneLighting":true,"audioPlay":false,"sceneViewState":{"showFog":true,"showMaterialUpdate":false,"showSkybox":true,"showFlares":true,"showImageEffects":true,"showParticleSystems":true},"in2DMode":false,"pivot":{"x":169.65524291992188,"y":131.73709106445313,"z":106.12663269042969},"rotation":{"x":-0.20895420014858247,"y":0.703397274017334,"z":-0.229901522397995,"w":-0.6393088698387146},"size":14.730693817138672,"orthographic":false}
+=======
+﻿{"cameraMode":{"drawMode":0,"name":"Shaded","section":"Shading Mode"},"sceneLighting":true,"audioPlay":false,"sceneViewState":{"showFog":true,"showMaterialUpdate":false,"showSkybox":true,"showFlares":true,"showImageEffects":true,"showParticleSystems":true},"in2DMode":false,"pivot":{"x":0.0,"y":0.5,"z":0.0},"rotation":{"x":0.20673500001430512,"y":0.7193137407302856,"z":-0.24061809480190278,"w":0.6180222034454346},"size":10.636370658874512,"orthographic":false}
+>>>>>>> feature/QQ

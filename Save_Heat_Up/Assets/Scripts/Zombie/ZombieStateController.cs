@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AI;
+using QQ.Utils;
 
 public class ZombieStateController : MonoBehaviour
 {
@@ -16,10 +17,13 @@ public class ZombieStateController : MonoBehaviour
     [SerializeField] private EZombieState _currentState = EZombieState.SPAWN;
     [SerializeField] private Animator _animController = null;
     [SerializeField] private NavMeshAgent _nav = null;
+    [SerializeField] private int _health = 10;
+
 
     public EZombieState CurrentState { get { return _currentState; } }
     public Animator AnimController { get { return _animController; } }
     public NavMeshAgent Nav { get { return _nav; } }
+    public int Health { get { return _health; } }
 
     Dictionary<EZombieState, IBaseState> _states = null;
 
@@ -36,6 +40,11 @@ public class ZombieStateController : MonoBehaviour
     private void Update()
     {
         _states[CurrentState].Update();
+
+        if (Input.GetKeyDown(KeyCode.K))
+        {
+            ChangeState(EZombieState.DEAD);
+        }
     }
 
     public void ChangeState(EZombieState nextState)
@@ -43,5 +52,15 @@ public class ZombieStateController : MonoBehaviour
         _states[CurrentState].Exit();
         _states[nextState].Enter();
         _currentState = nextState;
+    }
+       
+    public void IsBunkerReached()
+    {
+        transform.LookAt(LevelManager.Instance.Egg);
+    }
+
+    public void IsSpikesTouched()
+    {
+        _health -= 5;
     }
 }
