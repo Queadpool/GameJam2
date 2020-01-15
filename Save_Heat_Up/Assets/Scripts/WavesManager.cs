@@ -5,8 +5,13 @@ using QQ.Utils;
 
 public class WavesManager : MonoBehaviour
 {
+    [SerializeField] private AudioSource _audio = null;
+    [SerializeField] private GameObject _victory = null;
+    private AudioClip _music0 = null;
+    private AudioClip _music1 = null;
+    private AudioClip _music2 = null;
     private Timer _timer = null;
-    [SerializeField] private float _timerSpawn = 2.0f;
+    [SerializeField] private float _timerSpawn = 60.0f;
     [SerializeField] private int _waveCounter = 0;
     private int _score = 0;
     private bool _waveCleared = true;
@@ -38,13 +43,19 @@ public class WavesManager : MonoBehaviour
     {
         _timer = new Timer();
         _timer.ResetTimer(_timerSpawn);
+
+        _music0 = DatabaseManager.Instance.Database.MusicInGame;
+        _music1 = DatabaseManager.Instance.Database.MusicWave;
+        _music2 = DatabaseManager.Instance.Database.MusicCall;
+        _audio.clip = _music1;
+        _audio.Play();
     }
 
     // Update is called once per frame
     void Update()
     {
         Debug.Log("Score : " + _score);
-        Debug.Log(_timer.TimeLeft);
+        Debug.Log("Current wave : " + _waveCounter);
 
         _score = LevelManager.Instance.Score;
 
@@ -53,10 +64,18 @@ public class WavesManager : MonoBehaviour
             _waveCleared = false;
             _canSpawn = false;
             SpawnZombie();
+            _audio.clip = _music2;
+            _audio.Play();
         }
 
         CheckWaveTimer();
         CheckScore();
+
+        if (!_audio.isPlaying)
+        {
+            _audio.clip = _music0;
+            _audio.Play();
+        }
     }
     
     private void CheckScore()
@@ -69,6 +88,8 @@ public class WavesManager : MonoBehaviour
                     _waveCleared = true;
                     _timer.ResetTimer(_timerSpawn);
                     _waveCounter++;
+                    _audio.clip = _music1;
+                    _audio.Play();
                 }
                 break;
 
@@ -78,6 +99,8 @@ public class WavesManager : MonoBehaviour
                     _waveCleared = true;
                     _timer.ResetTimer(_timerSpawn);
                     _waveCounter++;
+                    _audio.clip = _music1;
+                    _audio.Play();
                 }
                 break;
 
@@ -87,6 +110,8 @@ public class WavesManager : MonoBehaviour
                     _waveCleared = true;
                     _timer.ResetTimer(_timerSpawn);
                     _waveCounter++;
+                    _audio.clip = _music1;
+                    _audio.Play();
                 }
                 break;
 
@@ -96,6 +121,8 @@ public class WavesManager : MonoBehaviour
                     _waveCleared = true;
                     _timer.ResetTimer(_timerSpawn);
                     _waveCounter++;
+                    _audio.clip = _music1;
+                    _audio.Play();
                 }
                 break;
 
@@ -105,19 +132,26 @@ public class WavesManager : MonoBehaviour
                     _waveCleared = true;
                     _timer.ResetTimer(_timerSpawn);
                     _waveCounter++;
+                    _audio.clip = _music1;
+                    _audio.Play();
                 }
                 break;
 
-            case 46:
+            case 44:
                 if (_waveCounter == 5)
                 {
                     _waveCleared = true;
                     _timer.ResetTimer(_timerSpawn);
                     _waveCounter++;
+                    _audio.clip = _music1;
+                    _audio.Play();
                 }
                 break;
 
-            case 60:
+            case 56:
+                Debug.Log("GG FRATE");
+                Destroy(LevelManager.Instance.Player.gameObject.GetComponent<PlayerMovement>());
+                _victory.SetActive(true);
                 break;
 
             default:
@@ -260,9 +294,70 @@ public class WavesManager : MonoBehaviour
                     break;
 
                 case 5:
+                    GameObject newZombie29 = Instantiate(zombie);
+                    newZombie29.transform.position = _sSpawn1.position;
+                    newZombie29.transform.Rotate(0, 90, 0);
+                    GameObject newZombie30 = Instantiate(zombie);
+                    newZombie30.transform.position = _sSpawn3.position;
+                    newZombie30.transform.Rotate(0, 90, 0);
+                    GameObject newHammerZombie3 = Instantiate(hammerZombie);
+                    newHammerZombie3.transform.position = _sSpawn0.position;
+                    newHammerZombie3.transform.Rotate(0, 90, 0);
+                    GameObject newHammerZombie4 = Instantiate(hammerZombie);
+                    newHammerZombie4.transform.position = _sSpawn2.position;
+                    newHammerZombie4.transform.Rotate(0, 90, 0);
+                    GameObject newHammerZombie5 = Instantiate(hammerZombie);
+                    newHammerZombie5.transform.position = _sSpawn4.position;
+                    newHammerZombie5.transform.Rotate(0, 90, 0);
+                    GameObject newZombie31 = Instantiate(zombie);
+                    newZombie31.transform.position = _eSpawn0.position;
+                    GameObject newZombie32 = Instantiate(zombie);
+                    newZombie32.transform.position = _eSpawn4.position;
+                    GameObject newHammerZombie6 = Instantiate(hammerZombie);
+                    newHammerZombie6.transform.position = _eSpawn2.position;
+                    GameObject newZombie33 = Instantiate(zombie);
+                    newZombie33.transform.position = _oSpawn0.position;
+                    newZombie33.transform.Rotate(0, 180, 0);
+                    GameObject newZombie34 = Instantiate(zombie);
+                    newZombie34.transform.position = _oSpawn4.position;
+                    newZombie34.transform.Rotate(0, 180, 0);
+                    GameObject newHammerZombie7 = Instantiate(hammerZombie);
+                    newHammerZombie7.transform.position = _oSpawn2.position;
+                    newHammerZombie7.transform.Rotate(0, 180, 0);
                     break;
 
                 case 6:
+                    GameObject newZombig1 = Instantiate(zombig);
+                    newZombig1.transform.position = _sSpawn0.position;
+                    newZombig1.transform.Rotate(0, 90, 0);
+                    GameObject newZombig2 = Instantiate(zombig);
+                    newZombig2.transform.position = _sSpawn4.position;
+                    newZombig2.transform.Rotate(0, 90, 0);
+                    GameObject newZombie35 = Instantiate(zombie);
+                    newZombie35.transform.position = _eSpawn0.position;
+                    GameObject newZombie36 = Instantiate(zombie);
+                    newZombie36.transform.position = _eSpawn1.position;
+                    GameObject newZombie37 = Instantiate(zombie);
+                    newZombie37.transform.position = _eSpawn3.position;
+                    GameObject newZombie38 = Instantiate(zombie);
+                    newZombie38.transform.position = _eSpawn4.position;
+                    GameObject newHammerZombie8 = Instantiate(hammerZombie);
+                    newHammerZombie8.transform.position = _eSpawn2.position;
+                    GameObject newZombie39 = Instantiate(zombie);
+                    newZombie39.transform.position = _oSpawn0.position;
+                    newZombie39.transform.Rotate(0, 180, 0);
+                    GameObject newZombie40 = Instantiate(zombie);
+                    newZombie40.transform.position = _oSpawn1.position;
+                    newZombie40.transform.Rotate(0, 180, 0);
+                    GameObject newZombie41 = Instantiate(zombie);
+                    newZombie41.transform.position = _oSpawn2.position;
+                    newZombie41.transform.Rotate(0, 180, 0);
+                    GameObject newZombie42 = Instantiate(zombie);
+                    newZombie42.transform.position = _oSpawn3.position;
+                    newZombie42.transform.Rotate(0, 180, 0);
+                    GameObject newHammerZombie9 = Instantiate(hammerZombie);
+                    newHammerZombie9.transform.position = _oSpawn4.position;
+                    newHammerZombie9.transform.Rotate(0, 180, 0);
                     break;
 
                 default:

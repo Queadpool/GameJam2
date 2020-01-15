@@ -5,7 +5,6 @@ using UnityEngine;
 public class ZombieDeadState : IBaseState
 {
     private ZombieStateController _zombieController = null;
-    private int _score = 0;
 
     public ZombieDeadState(ZombieStateController controller)
     {

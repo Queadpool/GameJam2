@@ -5,6 +5,8 @@ using UnityEngine;
 public class PlayerMovement : MonoBehaviour
 {
     [SerializeField] private CharacterController _controller = null;
+    [SerializeField] private Animator _animController = null;
+    [SerializeField] private AudioSource _audio = null;
     [SerializeField] private float _speed = 10f;
     [SerializeField] private float _gravity = -9.81f;
     private Vector3 _velocity;
@@ -28,5 +30,17 @@ public class PlayerMovement : MonoBehaviour
         _velocity.y = _gravity;
 
         _controller.Move(_velocity * Time.deltaTime);
+
+
+        if (Input.GetMouseButton(0))
+        {
+            _animController.SetBool("Hitting", true);
+            _audio.Play();
+        }
+    }
+
+    private void StopHit()
+    {
+        _animController.SetBool("Hitting", false);
     }
 }

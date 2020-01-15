@@ -1,0 +1,46 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!21 &2100000
+Material:
+  serializedVersion: 6
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_Name: Assets_g0
+  m_Shader: {fileID: 4800000, guid: be23c502842743c439b28aaa7e0d1def, type: 3}
+  m_ShaderKeywords: 
+  m_LightmapFlags: 0
+  m_EnableInstancingVariants: 1
+  m_DoubleSidedGI: 0
+  m_CustomRenderQueue: -1
+  stringTagMap: {}
+  disabledShaderPasses: []
+  m_SavedProperties:
+    serializedVersion: 3
+    m_TexEnvs:
+    - _emissive_assets:
+        m_Texture: {fileID: 2800000, guid: d18e803083e62b34aa37af3e2e4d37c1, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _emissive_assets2:
+        m_Texture: {fileID: 2800000, guid: 7658522576e564747a009b6fcf53c86a, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _texcoord:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _uvtout4:
+        m_Texture: {fileID: 2800000, guid: 77acae13fe6c8fb46abf100a1a29abc2, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    m_Floats:
+    - _Chauffe: 0
+    - _Float1: 0
+    - __dirty: 0
+    - _chauffe: 0
+    m_Colors:
+    - _EggColor: {r: 0.43796694, g: 0.6981132, b: 0.6787298, a: 0}
+    - _GREEN: {r: 2.9960785, g: 0.8627451, b: 0.047058824, a: 0}
+    - _RED: {r: 23.968628, g: 0.627451, b: 0, a: 0}

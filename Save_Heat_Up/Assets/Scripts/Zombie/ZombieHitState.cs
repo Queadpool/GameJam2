@@ -18,11 +18,12 @@ public class ZombieHitState : IBaseState
     public void Enter()
     {
         Debug.Log("HIT");
+        _animController.SetBool("Blocked", true);
     }
 
     public void Update()
     {
-        if (_health == 0)
+        if (_health <= 0)
         {
             _zombieController.ChangeState(ZombieStateController.EZombieState.DEAD);
         }
@@ -30,6 +31,6 @@ public class ZombieHitState : IBaseState
 
     public void Exit()
     {
-
+        _animController.SetBool("Blocked", false);
     }
 }

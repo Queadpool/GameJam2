@@ -26,8 +26,8 @@ public class ZombieMoveState : IBaseState
     public void Update()
     {
         _zombieController.transform.position += _zombieController.transform.forward * Time.deltaTime;
-
-        if(_health == 0)
+        
+        if(_health <= 0)
         {
             _zombieController.ChangeState(ZombieStateController.EZombieState.DEAD);
         }
